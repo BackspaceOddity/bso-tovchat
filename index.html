@@ -34,16 +34,31 @@
 
     #grid-bg {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
+      top: 24px;
+      left: 24px;
+      right: 24px;
+      bottom: 24px;
       z-index: 0;
-      background-image:
-        linear-gradient(to right, #D9D5C9 0px, #D9D5C9 0.5px, transparent 0.5px),
-        linear-gradient(to bottom, #D9D5C9 0px, #D9D5C9 0.5px, transparent 0.5px);
-      background-size: 200px 200px;
       pointer-events: none;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      grid-template-rows: repeat(4, 1fr);
+      border: 1px solid #c8c4b0;
+    }
+
+    #grid-bg .grid-cell {
+      border-right: 1px solid #c8c4b0;
+      border-bottom: 1px solid #c8c4b0;
+    }
+
+    /* Remove right border on last column */
+    #grid-bg .grid-cell:nth-child(5n) {
+      border-right: none;
+    }
+
+    /* Remove bottom border on last row (cells 16-20) */
+    #grid-bg .grid-cell:nth-child(n+16) {
+      border-bottom: none;
     }
 
     /* ---- Splash ---- */
@@ -348,11 +363,7 @@
     #password-gate {
       position: fixed;
       inset: 0;
-      background-color: #F5F2E9;
-      background-image:
-        linear-gradient(to right, #D9D5C9 0px, #D9D5C9 0.5px, transparent 0.5px),
-        linear-gradient(to bottom, #D9D5C9 0px, #D9D5C9 0.5px, transparent 0.5px);
-      background-size: 200px 200px;
+      background-color: transparent;
       z-index: 20;
       display: flex;
       align-items: center;
@@ -430,8 +441,13 @@
   </style>
 </head>
 <body>
-  <!-- Background grid -->
-  <div id="grid-bg"></div>
+  <!-- Background grid (5 cols × 4 rows = 20 cells) -->
+  <div id="grid-bg">
+    <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+    <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+    <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+    <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+  </div>
 
   <!-- SVG noise filter for grain texture -->
   <svg style="position:absolute;width:0;height:0;" aria-hidden="true">
