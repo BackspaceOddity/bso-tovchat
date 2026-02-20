@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>App</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: 'SouvenirGothic';
+      src: url('SouvenirGothic Bold.otf') format('opentype');
+      font-weight: bold;
+      font-style: normal;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html, body {
+      background-color: #F5F2E9;
+      overflow: hidden;
+      width: 100%;
+      height: 100%;
+      font-family: 'EB Garamond', serif;
+      color: #1A1A1A;
+    }
+
+    /* ---- Background grid ---- */
+
+    #grid-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      background-image:
+        linear-gradient(to right, #D9D5C9 0px, #D9D5C9 0.5px, transparent 0.5px),
+        linear-gradient(to bottom, #D9D5C9 0px, #D9D5C9 0.5px, transparent 0.5px);
+      background-size: 200px 200px;
+      pointer-events: none;
+    }
+
+    /* ---- Splash ---- */
+
+    #splash {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #F5F2E9;
+      z-index: 10;
+      overflow: hidden;
+    }
+
+    #splash svg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+    }
+
+    /* ---- Chat ---- */
+
+    #chat {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    #chat.fade-in {
+      opacity: 1;
+    }
+
+    #messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 48px 24px 24px;
+    }
+
+    #messages-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .message {
+      font-size: 18px;
+      line-height: 1.6;
+      margin-bottom: 24px;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+      max-width: 70%;
+      padding: 16px 20px;
+      border-radius: 12px;
+      color: #FFFFFF;
+      background-image: linear-gradient(
+        135deg,
+        #0A0A0A 0%,
+        #0B3D0B 18%,
+        #00E510 32%,
+        #D06CD0 48%,
+        #E87CE8 62%,
+        #F0A0F0 78%,
+        #FFFFFF 100%
+      );
+      background-size: 400% 400%;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Grain overlay via pseudo-element */
+    .message::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      opacity: 0.4;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+      filter: url(#noise);
+      background: transparent;
+    }
+
+    .message:last-child {
+      margin-bottom: 8px;
+    }
+
+    .message-user {
+      align-self: flex-end;
+    }
+
+    .message-ai {
+      align-self: flex-start;
+      background: linear-gradient(135deg, #1a5c2a 0%, #2d7a3d 40%, #267035 65%, #c050c0 88%, #d060d0 100%);
+      background-size: 100% 100%;
+    }
+
+    /* ---- Input area ---- */
+
+    #input-area {
+      position: relative;
+      z-index: 1;
+      flex-shrink: 0;
+      padding: 16px 24px 24px;
+    }
+
+    #input-wrap {
+      max-width: 720px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      background: linear-gradient(135deg, #c050c0, #d060d0, #20a020);
+      border-radius: 12px;
+      padding: 10px 16px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Grain on input */
+    #input-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      opacity: 0.4;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+      filter: url(#noise);
+      background: transparent;
+    }
+
+    #input-field {
+      flex: 1;
+      font-family: 'EB Garamond', serif;
+      font-size: 18px;
+      line-height: 1.5;
+      color: #FFFFFF;
+      background: transparent;
+      border: none;
+      outline: none;
+      resize: none;
+      overflow: hidden;
+      min-height: 27px;
+      max-height: 160px;
+      position: relative;
+      z-index: 1;
+      padding: 0;
+    }
+
+    #input-field::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    #send-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 0;
+      margin-left: 12px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      z-index: 1;
+      transition: opacity 0.15s ease;
+    }
+
+    #send-btn svg {
+      width: 24px;
+      height: 24px;
+    }
+
+    #send-btn:hover {
+      opacity: 0.7;
+    }
+
+    /* ---- Hero / Welcome block ---- */
+
+    #hero-wrap {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      transition: opacity 0.4s ease;
+    }
+
+    #hero-wrap.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #hero {
+      max-width: 720px;
+      width: 100%;
+      border-radius: 12px;
+      padding: 80px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, #050505 0%, #0A1A0A 20%, #0B2D0B 35%, #0A1A0A 42%, #C060C0 50%, #0B3D0B 58%, #0A1A0A 70%, #00C010 90%, #0B3D0B 100%);
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+      position: relative;
+      overflow: hidden;
+      color: #FFFFFF;
+      text-align: center;
+    }
+
+    #hero::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      opacity: 0.4;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+      filter: url(#noise);
+      background: transparent;
+    }
+
+    .hero-eyebrow {
+      font-size: 16px;
+      font-weight: 400;
+      opacity: 0.75;
+      margin-bottom: 20px;
+      letter-spacing: 0.03em;
+    }
+
+    .hero-headline {
+      font-family: 'SouvenirGothic', 'EB Garamond', serif;
+      font-size: 60px;
+      font-weight: 300;
+      line-height: 1.1;
+      margin-bottom: 20px;
+      white-space: pre-line;
+    }
+
+    .hero-sub {
+      font-family: 'EB Garamond', serif;
+      font-size: 17px;
+      font-weight: 400;
+      line-height: 1.5;
+      opacity: 0.8;
+    }
+
+    .hero-columns {
+      display: flex;
+      gap: 32px;
+      text-align: left;
+    }
+
+    .hero-col {
+      flex: 1;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 1.6;
+      opacity: 0.8;
+    }
+
+    /* ---- Thinking dots ---- */
+
+    .thinking-dots {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      height: 27px;
+    }
+
+    .thinking-dots span {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.7);
+      animation: dotPulse 1.2s ease-in-out infinite;
+    }
+
+    .thinking-dots span:nth-child(2) {
+      animation-delay: 0.15s;
+    }
+
+    .thinking-dots span:nth-child(3) {
+      animation-delay: 0.3s;
+    }
+
+    @keyframes dotPulse {
+      0%, 60%, 100% { opacity: 0.3; transform: scale(0.8); }
+      30% { opacity: 1; transform: scale(1); }
+    }
+
+    /* ---- Password gate ---- */
+
+    #password-gate {
+      position: fixed;
+      inset: 0;
+      background-color: #F5F2E9;
+      background-image:
+        linear-gradient(to right, #D9D5C9 0px, #D9D5C9 0.5px, transparent 0.5px),
+        linear-gradient(to bottom, #D9D5C9 0px, #D9D5C9 0.5px, transparent 0.5px);
+      background-size: 200px 200px;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: opacity 0.4s ease;
+    }
+
+    #password-gate.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    #pw-box {
+      text-align: center;
+    }
+
+    #pw-input-wrap {
+      display: flex;
+      align-items: center;
+      background-image: linear-gradient(
+        135deg,
+        #E8A04C 0%,
+        #E0985A 20%,
+        #D4A0E0 45%,
+        #C8B8E0 60%,
+        #D0D848 80%,
+        #E0E848 100%
+      );
+      background-size: 400% 400%;
+      background-position: 30% 50%;
+      border-radius: 12px;
+      padding: 10px 16px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10);
+      position: relative;
+      overflow: hidden;
+      width: 320px;
+    }
+
+    #pw-input-wrap::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      opacity: 0.4;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+      filter: url(#noise);
+      background: transparent;
+    }
+
+    #pw-input {
+      flex: 1;
+      font-family: 'EB Garamond', serif;
+      font-size: 18px;
+      line-height: 1.5;
+      color: #FFFFFF;
+      background: transparent;
+      border: none;
+      outline: none;
+      position: relative;
+      z-index: 1;
+    }
+
+    #pw-input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    #pw-error {
+      font-family: 'EB Garamond', serif;
+      font-size: 14px;
+      color: #D06CD0;
+      margin-top: 12px;
+      height: 20px;
+    }
+  </style>
+</head>
+<body>
+  <!-- Background grid -->
+  <div id="grid-bg"></div>
+
+  <!-- SVG noise filter for grain texture -->
+  <svg style="position:absolute;width:0;height:0;" aria-hidden="true">
+    <filter id="noise">
+      <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+  </svg>
+
+  <!-- Password gate -->
+  <div id="password-gate">
+    <div id="pw-box">
+      <div id="pw-input-wrap">
+        <input type="password" id="pw-input" placeholder="Password..." autocomplete="off">
+      </div>
+      <div id="pw-error"></div>
+    </div>
+  </div>
+
+  <!-- Splash -->
+  <div id="splash" style="display:none;">
+    <svg id="logo-svg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
+      <path class="logo-el" d="M267.18 133.339C267.18 157.332 260.58 176.783 256.42 176.783C252.26 176.783 252.116 157.332 252.116 133.339C252.116 109.345 252.26 89.8948 256.42 89.8948C260.58 89.8948 267.18 109.345 267.18 133.339Z" fill="black"/>
+      <path class="logo-el" d="M233.305 134.008C233.305 183.194 228.15 223.068 225.773 223.068C223.396 223.068 224.697 183.194 224.697 134.008C224.697 84.8212 223.396 44.9476 225.773 44.9476C228.15 44.9476 233.305 84.8212 233.305 134.008Z" fill="black"/>
+      <path class="logo-el" d="M201.543 133.5C201.543 197.683 197.464 249.713 195.087 249.713C192.71 249.713 192.935 197.683 192.935 133.5C192.935 69.3177 192.71 17.2875 195.087 17.2875C197.464 17.2875 201.543 69.3177 201.543 133.5Z" fill="black"/>
+      <ellipse class="logo-el" cx="159.024" cy="133.59" rx="11.8362" ry="133.59" fill="black"/>
+      <path class="logo-el" d="M128.375 133.313C128.375 204.393 125.569 262.015 116.06 262.015C106.552 262.015 93.9422 204.393 93.9422 133.313C93.9422 62.2321 106.552 4.60986 116.06 4.60986C125.569 4.60986 128.375 62.2321 128.375 133.313Z" fill="black"/>
+      <path class="logo-el" d="M75.3212 133.754C75.3212 190.438 70.2526 236.39 49.1561 236.39C28.0596 236.39 0 190.438 0 133.754C0 77.0693 28.0596 31.1174 49.1561 31.1174C70.2526 31.1174 75.3212 77.0693 75.3212 133.754Z" fill="black"/>
+    </svg>
+  </div>
+
+  <!-- Chat -->
+  <div id="chat">
+    <!-- Welcome hero -->
+    <div id="hero-wrap">
+      <div id="hero">
+        <div>
+          <h1 class="hero-headline">Tone of Voice Agent</h1>
+          <p class="hero-sub">Paste any text and get it back aligned with the Brand Persona.</p>
+        </div>
+      </div>
+    </div>
+    <!-- Messages (hidden initially) -->
+    <div id="messages" style="display:none;">
+      <div id="messages-inner"></div>
+    </div>
+    <div id="input-area">
+      <div id="input-wrap">
+        <textarea id="input-field" rows="1" placeholder="Type a message..."></textarea>
+        <button id="send-btn" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="arrow-grad" x1="0%" y1="50%" x2="100%" y2="50%"><stop offset="0%" stop-color="#c050c0"/><stop offset="100%" stop-color="#d060d0"/></linearGradient></defs><path d="M5 12h14M13 6l6 6-6 6" stroke="url(#arrow-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ---- Password gate ---- */
+    (function () {
+      var gate = document.getElementById('password-gate');
+      var pwInput = document.getElementById('pw-input');
+      var pwError = document.getElementById('pw-error');
+      var splash = document.getElementById('splash');
+      var PASSWORD = 'tov';
+
+      function unlock() {
+        sessionStorage.setItem('tov-auth', '1');
+        gate.classList.add('hidden');
+        setTimeout(function () {
+          gate.style.display = 'none';
+          startSplash();
+        }, 400);
+      }
+
+      // Check sessionStorage
+      if (sessionStorage.getItem('tov-auth') === '1') {
+        gate.style.display = 'none';
+        startSplash();
+      } else {
+        pwInput.focus();
+        pwInput.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') {
+            if (pwInput.value === PASSWORD) {
+              unlock();
+            } else {
+              pwError.textContent = 'Incorrect password';
+              pwInput.value = '';
+            }
+          }
+        });
+      }
+
+      function startSplash() {
+        splash.style.display = '';
+
+        var SVG_W = 268, SVG_H = 268;
+        var SVG_CX = SVG_W / 2, SVG_CY = SVG_H / 2;
+        var vw = window.innerWidth, vh = window.innerHeight;
+        var INITIAL_LOGO_PX = 140;
+
+        var vbW0 = SVG_W * vw / INITIAL_LOGO_PX;
+        var vbH0 = SVG_W * vh / INITIAL_LOGO_PX;
+        var vbX0 = SVG_CX - vbW0 / 2;
+        var vbY0 = SVG_CY - vbH0 / 2;
+
+        var svg = document.getElementById('logo-svg');
+        svg.setAttribute('viewBox', vbX0 + ' ' + vbY0 + ' ' + vbW0 + ' ' + vbH0);
+
+        var shapeCenters = [259.6, 229.0, 197.2, 159.0, 111.2, 37.7];
+        var elements = document.querySelectorAll('.logo-el');
+        var elData = [];
+        elements.forEach(function (el, i) {
+          elData.push({ el: el, offsetX: shapeCenters[i] - SVG_CX });
+        });
+
+        var PAUSE = 500, ANIM_DURATION = 2500, FADE_START = 0.8;
+        var ZOOM_FACTOR = 25, SPREAD_MULTIPLIER = 40;
+        var chat = document.getElementById('chat');
+
+        function easeIn(t) { return t * t * t; }
+
+        var startTime = null;
+        function animate(timestamp) {
+          if (!startTime) startTime = timestamp;
+          var t = Math.min((timestamp - startTime) / ANIM_DURATION, 1);
+
+          if (t >= 1) {
+            splash.style.display = 'none';
+            chat.classList.add('fade-in');
+            document.getElementById('input-field').focus();
+            return;
+          }
+
+          var eased = easeIn(t);
+          var zoomScale = 1 + eased * (ZOOM_FACTOR - 1);
+          var currentW = vbW0 / zoomScale;
+          var currentH = vbH0 / zoomScale;
+          svg.setAttribute('viewBox',
+            (SVG_CX - currentW / 2) + ' ' + (SVG_CY - currentH / 2) + ' ' + currentW + ' ' + currentH);
+
+          var opacity = t > FADE_START ? 1 - (t - FADE_START) / (1 - FADE_START) : 1;
+          elData.forEach(function (d) {
+            d.el.style.transform = 'translate(' + (d.offsetX * eased * SPREAD_MULTIPLIER) + 'px, 0)';
+            d.el.style.opacity = opacity;
+          });
+
+          requestAnimationFrame(animate);
+        }
+
+        setTimeout(function () { requestAnimationFrame(animate); }, PAUSE);
+      }
+    })();
+
+    /* ---- Chat logic ---- */
+    (function () {
+      var messagesInner = document.getElementById('messages-inner');
+      var messagesArea = document.getElementById('messages');
+      var inputField = document.getElementById('input-field');
+      var sendBtn = document.getElementById('send-btn');
+      var heroWrap = document.getElementById('hero-wrap');
+      var firstMessage = true;
+
+      var messageCount = 0;
+      function addMessage(text, role) {
+        var div = document.createElement('div');
+        div.className = 'message message-' + role;
+        div.textContent = text;
+
+        var posX = (messageCount * 27 + (role === 'user' ? 15 : 65)) % 100;
+        var posY = (messageCount * 41 + (role === 'user' ? 25 : 70)) % 100;
+        div.style.backgroundPosition = posX + '% ' + posY + '%';
+        messageCount++;
+
+        messagesInner.appendChild(div);
+        messagesArea.scrollTop = messagesArea.scrollHeight;
+        return div;
+      }
+
+      function addThinking() {
+        var div = document.createElement('div');
+        div.className = 'message message-ai';
+
+        var posX = (messageCount * 27 + 65) % 100;
+        var posY = (messageCount * 41 + 70) % 100;
+        div.style.backgroundPosition = posX + '% ' + posY + '%';
+
+        div.innerHTML = '<div class="thinking-dots"><span></span><span></span><span></span></div>';
+        messagesInner.appendChild(div);
+        messagesArea.scrollTop = messagesArea.scrollHeight;
+        return div;
+      }
+
+      function dismissHero(callback) {
+        if (!firstMessage) { callback(); return; }
+        firstMessage = false;
+        heroWrap.classList.add('hidden');
+        setTimeout(function () {
+          heroWrap.style.display = 'none';
+          messagesArea.style.display = '';
+          callback();
+        }, 400);
+      }
+
+      function send() {
+        var text = inputField.value.trim();
+        if (!text) return;
+        inputField.value = '';
+        autoResize();
+        dismissHero(function () {
+          addMessage(text, 'user');
+          var thinkingBubble = addThinking();
+
+          var reqBody = JSON.stringify({ message: text });
+          console.log('[TOV] Sending request:', reqBody);
+
+          fetch('https://ilspxdahkbeayhntskab.supabase.co/functions/v1/bso-tovbot', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlsc3B4ZGFoa2JlYXlobnRza2FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2MDEyOTUsImV4cCI6MjA4NzE3NzI5NX0.UikA9Zuvoc9sv8yBGvGynBGD9g7TqIgzBb1mpIfgYZU',
+              'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imlsc3B4ZGFoa2JlYXlobnRza2FiIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzE2MDEyOTUsImV4cCI6MjA4NzE3NzI5NX0.UikA9Zuvoc9sv8yBGvGynBGD9g7TqIgzBb1mpIfgYZU'
+            },
+            body: reqBody
+          })
+          .then(function (res) {
+            console.log('[TOV] Response status:', res.status);
+            return res.text();
+          })
+          .then(function (rawText) {
+            console.log('[TOV] Raw response:', rawText);
+            var data;
+            try { data = JSON.parse(rawText); } catch (e) {
+              console.error('[TOV] JSON parse error:', e);
+              thinkingBubble.textContent = 'Invalid response from server.';
+              messageCount++;
+              messagesArea.scrollTop = messagesArea.scrollHeight;
+              return;
+            }
+            console.log('[TOV] Parsed data:', data);
+            thinkingBubble.textContent = data.reply || 'No reply field in response. Keys: ' + Object.keys(data).join(', ');
+            messageCount++;
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+          })
+          .catch(function (err) {
+            console.error('[TOV] Fetch error:', err);
+            thinkingBubble.textContent = 'Something went wrong. Try again.';
+            messageCount++;
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+          });
+        });
+      }
+
+      // Auto-resize textarea
+      function autoResize() {
+        inputField.style.height = 'auto';
+        inputField.style.height = Math.min(inputField.scrollHeight, 160) + 'px';
+      }
+
+      inputField.addEventListener('input', autoResize);
+
+      inputField.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          send();
+        }
+      });
+
+      sendBtn.addEventListener('click', send);
+    })();
+  </script>
+</body>
+</html>
