@@ -30,37 +30,6 @@
       color: #1A1A1A;
     }
 
-    /* ---- Background grid ---- */
-
-    #grid-bg {
-      position: fixed;
-      top: 24px;
-      left: 24px;
-      right: 24px;
-      bottom: 24px;
-      z-index: 0;
-      pointer-events: none;
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      grid-template-rows: repeat(4, 1fr);
-      border: 1px solid #c8c4b0;
-    }
-
-    #grid-bg .grid-cell {
-      border-right: 1px solid #c8c4b0;
-      border-bottom: 1px solid #c8c4b0;
-    }
-
-    /* Remove right border on last column */
-    #grid-bg .grid-cell:nth-child(5n) {
-      border-right: none;
-    }
-
-    /* Remove bottom border on last row (cells 16-20) */
-    #grid-bg .grid-cell:nth-child(n+16) {
-      border-bottom: none;
-    }
-
     /* ---- Splash ---- */
 
     #splash {
@@ -121,17 +90,7 @@
       padding: 16px 20px;
       border-radius: 12px;
       color: #FFFFFF;
-      background-image: linear-gradient(
-        135deg,
-        #0A0A0A 0%,
-        #0B3D0B 18%,
-        #00E510 32%,
-        #D06CD0 48%,
-        #E87CE8 62%,
-        #F0A0F0 78%,
-        #FFFFFF 100%
-      );
-      background-size: 400% 400%;
+      background: linear-gradient(135deg, #E8A04C, #D4A0E0, #E0E848);
       box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
       position: relative;
       overflow: hidden;
@@ -160,8 +119,6 @@
 
     .message-ai {
       align-self: flex-start;
-      background: linear-gradient(135deg, #1a5c2a 0%, #2d7a3d 40%, #267035 65%, #c050c0 88%, #d060d0 100%);
-      background-size: 100% 100%;
     }
 
     /* ---- Input area ---- */
@@ -178,7 +135,7 @@
       margin: 0 auto;
       display: flex;
       align-items: center;
-      background: linear-gradient(135deg, #c050c0, #d060d0, #20a020);
+      background: linear-gradient(135deg, #E8A04C, #D4A0E0, #E0E848);
       border-radius: 12px;
       padding: 10px 16px;
       box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
@@ -269,7 +226,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #050505 0%, #0A1A0A 20%, #0B2D0B 35%, #0A1A0A 42%, #C060C0 50%, #0B3D0B 58%, #0A1A0A 70%, #00C010 90%, #0B3D0B 100%);
+      background: linear-gradient(135deg, #E8A04C, #D4A0E0, #E0E848);
       box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
       position: relative;
       overflow: hidden;
@@ -441,14 +398,6 @@
   </style>
 </head>
 <body>
-  <!-- Background grid (5 cols × 4 rows = 20 cells) -->
-  <div id="grid-bg">
-    <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
-    <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
-    <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
-    <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
-  </div>
-
   <!-- SVG noise filter for grain texture -->
   <svg style="position:absolute;width:0;height:0;" aria-hidden="true">
     <filter id="noise">
@@ -497,7 +446,7 @@
     <div id="input-area">
       <div id="input-wrap">
         <textarea id="input-field" rows="1" placeholder="Type a message..."></textarea>
-        <button id="send-btn" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="arrow-grad" x1="0%" y1="50%" x2="100%" y2="50%"><stop offset="0%" stop-color="#c050c0"/><stop offset="100%" stop-color="#d060d0"/></linearGradient></defs><path d="M5 12h14M13 6l6 6-6 6" stroke="url(#arrow-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        <button id="send-btn" aria-label="Send"><svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="arrow-grad" x1="0%" y1="50%" x2="100%" y2="50%"><stop offset="0%" stop-color="#E8A04C"/><stop offset="100%" stop-color="#D4A0E0"/></linearGradient></defs><path d="M5 12h14M13 6l6 6-6 6" stroke="url(#arrow-grad)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
       </div>
     </div>
   </div>
