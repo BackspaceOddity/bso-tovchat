@@ -30,27 +30,6 @@
       color: #1A1A1A;
     }
 
-    /* ---- Splash ---- */
-
-    #splash {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background-color: #F5F2E9;
-      z-index: 10;
-      overflow: hidden;
-    }
-
-    #splash svg {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-    }
-
     /* ---- Chat ---- */
 
     #chat {
@@ -152,7 +131,7 @@
 
     #chat.has-response #control-panel {
       margin-top: 0;
-      padding-top: 24px;
+      padding-top: 32px;
     }
 
     #control-card {
@@ -164,7 +143,7 @@
       display: grid;
       grid-template-columns: 65% 35%;
       grid-template-rows: 1fr auto;
-      background: linear-gradient(135deg, #E8A04C, #D4A0E0, #E0E848);
+      background: linear-gradient(135deg, #E8A04C, #D4A0E0 75%, #E0E848);
       position: relative;
     }
 
@@ -289,27 +268,6 @@
       background: linear-gradient(135deg, #D4A0E0, #C8A8D8, #E0E848);
       border-radius: 12px;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-      max-height: 50vh;
-      overflow-y: auto;
-      scrollbar-width: thin;
-      scrollbar-color: rgba(255, 255, 255, 0.35) transparent;
-    }
-
-    .cp-dropdown-panel::-webkit-scrollbar {
-      width: 6px;
-    }
-
-    .cp-dropdown-panel::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    .cp-dropdown-panel::-webkit-scrollbar-thumb {
-      background: rgba(255, 255, 255, 0.3);
-      border-radius: 3px;
-    }
-
-    .cp-dropdown-panel::-webkit-scrollbar-thumb:hover {
-      background: rgba(255, 255, 255, 0.5);
     }
 
     .cp-dropdown.open .cp-dropdown-panel {
@@ -405,12 +363,261 @@
       30% { opacity: 1; transform: scale(1); }
     }
 
+    /* ---- Settings gear button ---- */
+
+    #settings-btn {
+      position: fixed;
+      top: 32px;
+      left: 48px;
+      z-index: 15;
+      background: linear-gradient(135deg, #E8A04C, #D4A0E0, #E0E848);
+      color: #FFFFFF;
+      -webkit-text-fill-color: #FFFFFF;
+      font-family: 'SouvenirGothic', 'EB Garamond', serif;
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border: none;
+      border-radius: 12px;
+      padding: 8px 16px;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+      pointer-events: none;
+    }
+
+    #settings-btn:hover {
+      opacity: 0.85;
+    }
+
+    /* ---- Settings modal ---- */
+
+    #settings-modal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 50;
+      background-color: #F5F2E9;
+      overflow-y: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+    }
+
+    #settings-modal::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #settings-modal::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    #settings-modal::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.15);
+      border-radius: 3px;
+    }
+
+    #settings-modal.open {
+      display: block;
+    }
+
+    #settings-inner {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 32px 24px 48px;
+    }
+
+    #settings-close {
+      position: fixed;
+      top: 32px;
+      left: 48px;
+      z-index: 55;
+      background: linear-gradient(135deg, #E8A04C, #D4A0E0, #E0E848);
+      color: #FFFFFF;
+      font-family: 'SouvenirGothic', 'EB Garamond', serif;
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border: none;
+      border-radius: 12px;
+      padding: 8px 16px;
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+    }
+
+    #settings-close:hover {
+      opacity: 0.85;
+    }
+
+    .settings-tabs {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 14px 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+      position: relative;
+      z-index: 1;
+    }
+
+    .settings-tab-divider {
+      width: 1px;
+      align-self: stretch;
+      margin: -14px 0;
+      background: rgba(255, 255, 255, 0.25);
+      flex-shrink: 0;
+    }
+
+    .settings-tab {
+      font-family: 'SouvenirGothic', 'EB Garamond', serif;
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      background: none;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      color: rgba(255, 255, 255, 0.4);
+      transition: color 0.15s ease;
+    }
+
+    .settings-tab:hover {
+      color: rgba(255, 255, 255, 0.7);
+    }
+
+    .settings-tab.active {
+      color: #FFFFFF;
+    }
+
+    .settings-card {
+      background: linear-gradient(135deg, #E8A04C, #D4A0E0 75%, #E0E848);
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 8px;
+    }
+
+    .settings-card::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      opacity: 0.4;
+      mix-blend-mode: overlay;
+      pointer-events: none;
+      filter: url(#noise);
+      background: transparent;
+    }
+
+    .settings-card-section {
+      padding: 14px 16px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .settings-card-section + .settings-card-section {
+      border-top: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .settings-card-label {
+      font-family: 'SouvenirGothic', 'EB Garamond', serif;
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #FFFFFF;
+      margin-bottom: 6px;
+    }
+
+    .settings-tbd {
+      padding: 14px 16px;
+      text-align: left;
+      font-family: 'EB Garamond', serif;
+      font-size: 14px;
+      color: rgba(255, 255, 255, 0.6);
+      position: relative;
+      z-index: 1;
+    }
+
+    .settings-textarea {
+      width: 100%;
+      min-height: 80px;
+      font-family: 'EB Garamond', serif;
+      font-size: 15px;
+      line-height: 1.5;
+      color: #FFFFFF;
+      background: transparent;
+      border: none;
+      border-radius: 0;
+      padding: 0;
+      resize: none;
+      outline: none;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    .settings-textarea:focus {
+      outline: none;
+    }
+
+    .settings-textarea::placeholder {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .settings-actions {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 16px;
+      border-top: 1px solid rgba(255, 255, 255, 0.25);
+      position: relative;
+      z-index: 1;
+    }
+
+    .settings-btn-save {
+      font-family: 'SouvenirGothic', 'EB Garamond', serif;
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #FFFFFF;
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: opacity 0.15s ease;
+    }
+
+    .settings-btn-save:hover {
+      opacity: 0.7;
+    }
+
+    .settings-btn-reset {
+      font-family: 'SouvenirGothic', 'EB Garamond', serif;
+      font-size: 11px;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #FFFFFF;
+      background: transparent;
+      border: none;
+      padding: 0;
+      cursor: pointer;
+      transition: color 0.15s ease;
+    }
+
+    .settings-btn-reset:hover {
+      opacity: 0.7;
+    }
+
     /* ---- Password gate ---- */
 
     #password-gate {
       position: fixed;
       inset: 0;
-      background-color: transparent;
+      background-color: #F5F2E9;
       z-index: 20;
       display: flex;
       align-items: center;
@@ -430,17 +637,7 @@
     #pw-input-wrap {
       display: flex;
       align-items: center;
-      background-image: linear-gradient(
-        135deg,
-        #E8A04C 0%,
-        #E0985A 20%,
-        #D4A0E0 45%,
-        #C8B8E0 60%,
-        #D0D848 80%,
-        #E0E848 100%
-      );
-      background-size: 400% 400%;
-      background-position: 30% 50%;
+      background: linear-gradient(135deg, #E8A04C, #D4A0E0 75%, #E0E848);
       border-radius: 12px;
       padding: 10px 16px;
       box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10);
@@ -485,9 +682,13 @@
       margin-top: 12px;
       height: 20px;
     }
+
   </style>
 </head>
 <body>
+  <!-- Settings gear button -->
+  <button id="settings-btn">PROMPTS</button>
+
   <!-- SVG noise filter for grain texture -->
   <svg style="position:absolute;width:0;height:0;" aria-hidden="true">
     <filter id="noise">
@@ -506,18 +707,6 @@
     </div>
   </div>
 
-  <!-- Splash -->
-  <div id="splash" style="display:none;">
-    <svg id="logo-svg" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid meet">
-      <path class="logo-el" d="M267.18 133.339C267.18 157.332 260.58 176.783 256.42 176.783C252.26 176.783 252.116 157.332 252.116 133.339C252.116 109.345 252.26 89.8948 256.42 89.8948C260.58 89.8948 267.18 109.345 267.18 133.339Z" fill="black"/>
-      <path class="logo-el" d="M233.305 134.008C233.305 183.194 228.15 223.068 225.773 223.068C223.396 223.068 224.697 183.194 224.697 134.008C224.697 84.8212 223.396 44.9476 225.773 44.9476C228.15 44.9476 233.305 84.8212 233.305 134.008Z" fill="black"/>
-      <path class="logo-el" d="M201.543 133.5C201.543 197.683 197.464 249.713 195.087 249.713C192.71 249.713 192.935 197.683 192.935 133.5C192.935 69.3177 192.71 17.2875 195.087 17.2875C197.464 17.2875 201.543 69.3177 201.543 133.5Z" fill="black"/>
-      <ellipse class="logo-el" cx="159.024" cy="133.59" rx="11.8362" ry="133.59" fill="black"/>
-      <path class="logo-el" d="M128.375 133.313C128.375 204.393 125.569 262.015 116.06 262.015C106.552 262.015 93.9422 204.393 93.9422 133.313C93.9422 62.2321 106.552 4.60986 116.06 4.60986C125.569 4.60986 128.375 62.2321 128.375 133.313Z" fill="black"/>
-      <path class="logo-el" d="M75.3212 133.754C75.3212 190.438 70.2526 236.39 49.1561 236.39C28.0596 236.39 0 190.438 0 133.754C0 77.0693 28.0596 31.1174 49.1561 31.1174C70.2526 31.1174 75.3212 77.0693 75.3212 133.754Z" fill="black"/>
-    </svg>
-  </div>
-
   <!-- Chat -->
   <div id="chat">
     <!-- Control panel -->
@@ -529,10 +718,10 @@
         </div>
         <div class="card-selectors">
           <div class="card-select-group">
-            <div class="cp-label">Rewrite</div>
+            <div class="cp-label">Medium</div>
             <div class="cp-dropdown" id="dd-rewrite">
               <button type="button" class="cp-dropdown-trigger">
-                <span class="dd-text">Choose format...</span>
+                <span class="dd-text">Pick medium</span>
                 <svg class="dd-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
               <div class="cp-dropdown-panel">
@@ -553,7 +742,7 @@
             <div class="cp-label">Output</div>
             <div class="cp-dropdown" id="dd-output">
               <button type="button" class="cp-dropdown-trigger">
-                <span class="dd-text">Choose output...</span>
+                <span class="dd-text">Set output</span>
                 <svg class="dd-chevron" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
               <div class="cp-dropdown-panel">
@@ -573,28 +762,43 @@
     </div>
   </div>
 
+  <!-- Settings modal -->
+  <div id="settings-modal">
+    <div id="settings-inner">
+      <button id="settings-close">CHAT</button>
+      <div id="settings-body"></div>
+    </div>
+  </div>
+
   <script>
     /* ---- Password gate ---- */
     (function () {
       var gate = document.getElementById('password-gate');
       var pwInput = document.getElementById('pw-input');
       var pwError = document.getElementById('pw-error');
-      var splash = document.getElementById('splash');
+      var chat = document.getElementById('chat');
+      var settingsBtn = document.getElementById('settings-btn');
       var PASSWORD = 'tov';
+
+      function revealApp() {
+        chat.classList.add('fade-in');
+        settingsBtn.style.opacity = '0.7';
+        settingsBtn.style.pointerEvents = '';
+        document.getElementById('data-input').focus();
+      }
 
       function unlock() {
         sessionStorage.setItem('tov-auth', '1');
         gate.classList.add('hidden');
         setTimeout(function () {
           gate.style.display = 'none';
-          startSplash();
+          revealApp();
         }, 400);
       }
 
-      // Check sessionStorage
       if (sessionStorage.getItem('tov-auth') === '1') {
         gate.style.display = 'none';
-        startSplash();
+        revealApp();
       } else {
         pwInput.focus();
         pwInput.addEventListener('keydown', function (e) {
@@ -608,66 +812,6 @@
           }
         });
       }
-
-      function startSplash() {
-        splash.style.display = '';
-
-        var SVG_W = 268, SVG_H = 268;
-        var SVG_CX = SVG_W / 2, SVG_CY = SVG_H / 2;
-        var vw = window.innerWidth, vh = window.innerHeight;
-        var INITIAL_LOGO_PX = 140;
-
-        var vbW0 = SVG_W * vw / INITIAL_LOGO_PX;
-        var vbH0 = SVG_W * vh / INITIAL_LOGO_PX;
-        var vbX0 = SVG_CX - vbW0 / 2;
-        var vbY0 = SVG_CY - vbH0 / 2;
-
-        var svg = document.getElementById('logo-svg');
-        svg.setAttribute('viewBox', vbX0 + ' ' + vbY0 + ' ' + vbW0 + ' ' + vbH0);
-
-        var shapeCenters = [259.6, 229.0, 197.2, 159.0, 111.2, 37.7];
-        var elements = document.querySelectorAll('.logo-el');
-        var elData = [];
-        elements.forEach(function (el, i) {
-          elData.push({ el: el, offsetX: shapeCenters[i] - SVG_CX });
-        });
-
-        var PAUSE = 500, ANIM_DURATION = 2500, FADE_START = 0.8;
-        var ZOOM_FACTOR = 25, SPREAD_MULTIPLIER = 40;
-        var chat = document.getElementById('chat');
-
-        function easeIn(t) { return t * t * t; }
-
-        var startTime = null;
-        function animate(timestamp) {
-          if (!startTime) startTime = timestamp;
-          var t = Math.min((timestamp - startTime) / ANIM_DURATION, 1);
-
-          if (t >= 1) {
-            splash.style.display = 'none';
-            chat.classList.add('fade-in');
-            document.getElementById('data-input').focus();
-            return;
-          }
-
-          var eased = easeIn(t);
-          var zoomScale = 1 + eased * (ZOOM_FACTOR - 1);
-          var currentW = vbW0 / zoomScale;
-          var currentH = vbH0 / zoomScale;
-          svg.setAttribute('viewBox',
-            (SVG_CX - currentW / 2) + ' ' + (SVG_CY - currentH / 2) + ' ' + currentW + ' ' + currentH);
-
-          var opacity = t > FADE_START ? 1 - (t - FADE_START) / (1 - FADE_START) : 1;
-          elData.forEach(function (d) {
-            d.el.style.transform = 'translate(' + (d.offsetX * eased * SPREAD_MULTIPLIER) + 'px, 0)';
-            d.el.style.opacity = opacity;
-          });
-
-          requestAnimationFrame(animate);
-        }
-
-        setTimeout(function () { requestAnimationFrame(animate); }, PAUSE);
-      }
     })();
 
     /* ---- Chat logic ---- */
@@ -680,7 +824,7 @@
 
       // Custom dropdown state
       var ddState = { rewrite: '', output: '' };
-      var ddDefaults = { rewrite: 'Choose format...', output: 'Choose output...' };
+      var ddDefaults = { rewrite: 'Pick medium', output: 'Set output' };
 
       document.querySelectorAll('.cp-dropdown').forEach(function (dd) {
         var id = dd.id.replace('dd-', '');
@@ -693,8 +837,8 @@
           document.querySelectorAll('.cp-dropdown.open').forEach(function (d) { d.classList.remove('open'); });
           if (!wasOpen) {
             dd.classList.add('open');
-            // Position the panel to the right of the card, bottom-aligned with card bottom
             var cardRect = document.getElementById('control-card').getBoundingClientRect();
+            var triggerRect = trigger.getBoundingClientRect();
             var vh = window.innerHeight;
             var panelLeft = cardRect.right + 6;
             // If panel would overflow right edge, position to the left of the card
@@ -703,11 +847,18 @@
               if (panelLeft < 0) panelLeft = 8;
             }
             panel.style.left = panelLeft + 'px';
-            // Anchor bottom edge to card's bottom edge
-            var bottomVal = vh - cardRect.bottom;
-            if (bottomVal < 0) bottomVal = 8;
-            panel.style.bottom = bottomVal + 'px';
-            panel.style.top = 'auto';
+            // Viewport-aware: more space below → open downward, more space above → open upward
+            var spaceBelow = vh - triggerRect.top;
+            var spaceAbove = triggerRect.bottom;
+            if (spaceBelow >= spaceAbove) {
+              // Open downward: top-align with trigger
+              panel.style.top = triggerRect.top + 'px';
+              panel.style.bottom = 'auto';
+            } else {
+              // Open upward: bottom-align with trigger bottom
+              panel.style.bottom = (vh - triggerRect.bottom) + 'px';
+              panel.style.top = 'auto';
+            }
           }
         });
 
@@ -806,30 +957,27 @@
         bubble.scrollIntoView({ behavior: 'smooth', block: 'start' });
       }
 
-      var rewriteInstructions = {
-        landing_page: 'Rewrite as landing page copy: headline, subheadline, key benefit sections with CTAs.',
-        social_post: 'Rewrite as a social media post: concise, with a hook, max 280 characters for the main text.',
-        blog_post: 'Rewrite as a blog post: engaging intro, structured sections, conclusion.',
-        presentation_slides: 'Rewrite as presentation slide content: one clear headline per slide, 2-3 supporting bullet points per slide, speaker notes for each slide. Aim for 5-8 slides.',
-        email_campaign: 'Rewrite as an email campaign: subject line, preview text, email body with clear CTA. Include 3 variants — welcome, nurture, and win-back.',
-        job_posting: 'Rewrite as a job posting: role title, punchy intro about the role, key responsibilities, requirements, and a compelling closing CTA to apply.',
-        press_release: 'Rewrite as a press release: headline, dateline, lead paragraph with who/what/when/where/why, supporting quotes, boilerplate.',
-        ad_copy: 'Rewrite as ad copy variants: 3 Google Ads (30-char headlines + 90-char descriptions) and 3 Meta Ads (short primary text + headline + CTA).',
-        video_script: 'Rewrite as a video script: hook (first 3 seconds), problem, solution, proof points, CTA. Include visual direction notes. Aim for 60-90 seconds.',
-        changelog: 'Rewrite as a changelog/release notes entry: version header, concise bullet points grouped by New/Improved/Fixed, written in a human tone.'
-      };
-
-      var outputInstructions = {
-        plain_text: 'Return as plain text, no markup.',
-        claude_code_prompt: 'Return as a detailed prompt for Claude Code that will implement this content — include file structure, copy, and styling notes.',
-        markdown: 'Return as clean Markdown with proper heading hierarchy, lists, and formatting.'
-      };
+      // Instruction lookups — loaded from localStorage or defaults
+      function getRewriteInstructions() {
+        try {
+          var saved = localStorage.getItem('tov-rewrite-instructions');
+          if (saved) return JSON.parse(saved);
+        } catch (e) {}
+        return null;
+      }
+      function getOutputInstructions() {
+        try {
+          var saved = localStorage.getItem('tov-output-instructions');
+          if (saved) return JSON.parse(saved);
+        } catch (e) {}
+        return null;
+      }
 
       function generate() {
         var data = dataInput.value.trim();
         if (!data) return;
         if (!ddState.rewrite) {
-          alert('Please select a Rewrite format.');
+          alert('Please select a Medium format.');
           return;
         }
         if (!ddState.output) {
@@ -844,8 +992,10 @@
 
         var thinkingBubble = addThinking();
 
-        var rewriteText = rewriteInstructions[ddState.rewrite] || ddState.rewrite;
-        var outputText = outputInstructions[ddState.output] || ddState.output;
+        var ri = getRewriteInstructions() || window.DEFAULT_REWRITE;
+        var oi = getOutputInstructions() || window.DEFAULT_OUTPUT;
+        var rewriteText = ri[ddState.rewrite] || ddState.rewrite;
+        var outputText = oi[ddState.output] || ddState.output;
         var combinedMessage = rewriteText + '\n' + outputText + '\n\nSource content:\n' + data;
 
         console.log('[TOV] Dropdown state:', JSON.stringify(ddState));
@@ -887,6 +1037,204 @@
       }
 
       generateBtn.addEventListener('click', generate);
+    })();
+
+    /* ---- Settings ---- */
+    (function () {
+      // Default instruction templates
+      window.DEFAULT_REWRITE = {
+        landing_page: "Rewrite as a landing page: hero headline, subheadline, key benefit sections with CTAs.",
+        social_post: "Rewrite as a social media post: concise, with a hook, max 280 characters for the main text.",
+        blog_post: "Rewrite as a blog post: engaging intro, structured sections, conclusion.",
+        presentation_slides: "Rewrite as presentation slide content: one clear headline per slide, 2-3 supporting bullet points per slide, speaker notes for each slide. Aim for 5-8 slides.",
+        email_campaign: "Rewrite as an email campaign: subject line, preview text, email body with clear CTA. Include 3 variants \u2014 welcome, nurture, and win-back.",
+        job_posting: "Rewrite as a job posting: role title, punchy intro about the role, key responsibilities, requirements, and a compelling closing CTA to apply.",
+        press_release: "Rewrite as a press release: headline, dateline, lead paragraph with who/what/when/where/why, supporting quotes, boilerplate.",
+        ad_copy: "Rewrite as ad copy variants: 3 Google Ads (30-char headlines + 90-char descriptions) and 3 Meta Ads (short primary text + headline + CTA).",
+        video_script: "Rewrite as a video script: hook (first 3 seconds), problem, solution, proof points, CTA. Include visual direction notes. Aim for 60-90 seconds.",
+        changelog: "Rewrite as a changelog/release notes entry: version header, concise bullet points grouped by New/Improved/Fixed, written in a human tone."
+      };
+
+      window.DEFAULT_OUTPUT = {
+        plain_text: "Return as plain text, no markup.",
+        claude_code_prompt: "Return as a detailed prompt for Claude Code that will implement this content \u2014 include file structure, copy, and styling notes.",
+        markdown: "Return as clean Markdown with proper heading hierarchy, lists, and formatting."
+      };
+
+      var rewriteLabels = {
+        landing_page: 'Landing page',
+        social_post: 'Social post',
+        blog_post: 'Blog post',
+        presentation_slides: 'Presentation slides',
+        email_campaign: 'Email campaign',
+        job_posting: 'Job posting',
+        press_release: 'Press release',
+        ad_copy: 'Ad copy',
+        video_script: 'Video script',
+        changelog: 'Changelog'
+      };
+
+      var outputLabels = {
+        plain_text: 'Plain text',
+        claude_code_prompt: 'Claude Code prompt',
+        markdown: 'Markdown'
+      };
+
+      var modal = document.getElementById('settings-modal');
+      var body = document.getElementById('settings-body');
+      var settingsBtn = document.getElementById('settings-btn');
+      var closeBtn = document.getElementById('settings-close');
+      var saveBtn, resetBtn;
+
+      var rewriteOrder = ['landing_page','social_post','blog_post','presentation_slides','email_campaign','job_posting','press_release','ad_copy','video_script','changelog'];
+      var outputOrder = ['plain_text','claude_code_prompt','markdown'];
+
+      function autoResizeTextarea(el) {
+        el.style.height = 'auto';
+        el.style.height = el.scrollHeight + 'px';
+      }
+
+      function initTextareaAutoResize() {
+        body.querySelectorAll('.settings-textarea').forEach(function (ta) {
+          autoResizeTextarea(ta);
+          ta.addEventListener('input', function () { autoResizeTextarea(ta); });
+        });
+      }
+
+      function loadCurrent() {
+        var ri, oi;
+        try { ri = JSON.parse(localStorage.getItem('tov-rewrite-instructions')); } catch(e) {}
+        try { oi = JSON.parse(localStorage.getItem('tov-output-instructions')); } catch(e) {}
+        return {
+          rewrite: ri || JSON.parse(JSON.stringify(window.DEFAULT_REWRITE)),
+          output: oi || JSON.parse(JSON.stringify(window.DEFAULT_OUTPUT))
+        };
+      }
+
+      var activeTab = 'medium';
+
+      function buildForm() {
+        var current = loadCurrent();
+        var html = '<div class="settings-card">';
+        // Tabs row inside the card
+        html += '<div class="settings-tabs">' +
+          '<button type="button" class="settings-tab' + (activeTab === 'medium' ? ' active' : '') + '" data-tab="medium">Medium</button>' +
+          '<span class="settings-tab-divider"></span>' +
+          '<button type="button" class="settings-tab' + (activeTab === 'output' ? ' active' : '') + '" data-tab="output">Output</button>' +
+          '<span class="settings-tab-divider"></span>' +
+          '<button type="button" class="settings-tab' + (activeTab === 'tone' ? ' active' : '') + '" data-tab="tone">Tone</button>' +
+          '</div>';
+        // Medium panel
+        html += '<div class="settings-tab-panel" data-tab="medium"' + (activeTab !== 'medium' ? ' style="display:none"' : '') + '>';
+        rewriteOrder.forEach(function (key) {
+          html += '<div class="settings-card-section">' +
+            '<div class="settings-card-label">' + rewriteLabels[key] + '</div>' +
+            '<textarea class="settings-textarea" data-group="rewrite" data-key="' + key + '">' +
+            escapeHtml(current.rewrite[key] || '') +
+            '</textarea></div>';
+        });
+        html += '</div>';
+        // Output panel
+        html += '<div class="settings-tab-panel" data-tab="output"' + (activeTab !== 'output' ? ' style="display:none"' : '') + '>';
+        outputOrder.forEach(function (key) {
+          html += '<div class="settings-card-section">' +
+            '<div class="settings-card-label">' + outputLabels[key] + '</div>' +
+            '<textarea class="settings-textarea" data-group="output" data-key="' + key + '">' +
+            escapeHtml(current.output[key] || '') +
+            '</textarea></div>';
+        });
+        html += '</div>';
+        // Tone panel
+        html += '<div class="settings-tab-panel" data-tab="tone"' + (activeTab !== 'tone' ? ' style="display:none"' : '') + '>';
+        html += '<div class="settings-tbd">Currently defined in the system prompt.</div>';
+        html += '</div>';
+        // Actions row inside the card
+        html += '<div class="settings-actions" id="settings-actions"' + (activeTab === 'tone' ? ' style="display:none"' : '') + '>' +
+          '<button type="button" class="settings-btn-save" id="settings-save">Save</button>' +
+          '<button type="button" class="settings-btn-reset" id="settings-reset">Reset to defaults</button>' +
+          '</div>';
+        html += '</div>'; // close settings-card
+        body.innerHTML = html;
+        // Re-query action elements
+        saveBtn = document.getElementById('settings-save');
+        resetBtn = document.getElementById('settings-reset');
+        saveBtn.addEventListener('click', saveSettings);
+        resetBtn.addEventListener('click', resetDefaults);
+        // Tab switching
+        body.querySelectorAll('.settings-tab').forEach(function (tab) {
+          tab.addEventListener('click', function () {
+            switchTab(tab.getAttribute('data-tab'));
+          });
+        });
+      }
+
+      function switchTab(tabName) {
+        activeTab = tabName;
+        body.querySelectorAll('.settings-tab').forEach(function (t) {
+          t.classList.toggle('active', t.getAttribute('data-tab') === tabName);
+        });
+        body.querySelectorAll('.settings-tab-panel').forEach(function (p) {
+          p.style.display = p.getAttribute('data-tab') === tabName ? '' : 'none';
+        });
+        // Show/hide actions row (hidden on tone tab)
+        var actions = document.getElementById('settings-actions');
+        if (actions) actions.style.display = tabName === 'tone' ? 'none' : '';
+        // Re-measure textareas in newly visible panel
+        var panel = body.querySelector('.settings-tab-panel[data-tab="' + tabName + '"]');
+        if (panel) {
+          panel.querySelectorAll('.settings-textarea').forEach(function (ta) {
+            autoResizeTextarea(ta);
+          });
+        }
+      }
+
+      function escapeHtml(str) {
+        return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+      }
+
+      function openSettings() {
+        buildForm();
+        modal.classList.add('open');
+        requestAnimationFrame(function () {
+          initTextareaAutoResize();
+        });
+      }
+
+      function closeSettings() {
+        modal.classList.remove('open');
+      }
+
+      function saveSettings() {
+        var rewrite = {};
+        var output = {};
+        body.querySelectorAll('.settings-textarea').forEach(function (ta) {
+          var group = ta.getAttribute('data-group');
+          var key = ta.getAttribute('data-key');
+          if (group === 'rewrite') rewrite[key] = ta.value;
+          else if (group === 'output') output[key] = ta.value;
+        });
+        localStorage.setItem('tov-rewrite-instructions', JSON.stringify(rewrite));
+        localStorage.setItem('tov-output-instructions', JSON.stringify(output));
+        saveBtn.textContent = 'Saved';
+        setTimeout(function () { saveBtn.textContent = 'Save'; }, 2000);
+      }
+
+      function resetDefaults() {
+        localStorage.removeItem('tov-rewrite-instructions');
+        localStorage.removeItem('tov-output-instructions');
+        buildForm();
+        requestAnimationFrame(function () { initTextareaAutoResize(); });
+        resetBtn.textContent = 'Reset done';
+        setTimeout(function () { resetBtn.textContent = 'Reset to defaults'; }, 2000);
+      }
+
+      settingsBtn.addEventListener('click', openSettings);
+      closeBtn.addEventListener('click', closeSettings);
+
+      // Close on Escape
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && modal.classList.contains('open')) closeSettings();
+      });
     })();
   </script>
 </body>
